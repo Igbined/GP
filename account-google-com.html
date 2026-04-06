@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vote Pending</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { darkMode: 'media' }</script>
+  <style>
+    @keyframes loadingBar {
+      0%   { width: 0%; left: 0%; }
+      50%  { width: 70%; left: 15%; }
+      100% { width: 0%; left: 100%; }
+    }
+
+    .loading-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(to right, #4285f4, #ea4335, #fbbc05, #34a853);
+      animation: loadingBar 1.8s infinite ease-in-out;
+      z-index: 100;
+    }
+
+    :root {
+      --bg-page:     #f0f4f9;
+      --bg-card:     #ffffff;
+      --text-heading:#202124;
+      --text-body:   #444746;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-page:     #131314;
+        --bg-card:     #131314;
+        --text-heading:#e8eaed;
+        --text-body:   #e3e3e3;
+      }
+    }
+
+    body { 
+      background: var(--bg-page); 
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    .g-card {
+      background: var(--bg-card);
+      position: relative;
+      width: 390px;
+      min-height: 844px;
+      margin: 40px auto;
+      border-radius: 40px;
+      box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 32px;
+    }
+
+    .g-heading { color: var(--text-heading); }
+    .g-body { color: var(--text-body); }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center">
+
+  <div class="g-card">
+    <!-- Top Loading Bar (always running) -->
+    <div class="loading-bar"></div>
+
+    <!-- Content -->
+    <div class="mb-12">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-20 h-20 mx-auto text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.25">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7" />
+      </svg>
+    </div>
+
+    <h1 class="g-heading text-[28px] font-medium mb-6">Vote Pending</h1>
+    
+    <p class="g-body text-[15px] leading-relaxed max-w-[260px]">
+      Get the code to tap from contestant and verify your vote
+    </p>
+  </div>
+
+</body>
+</html>
